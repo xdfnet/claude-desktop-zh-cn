@@ -1,7 +1,7 @@
 <p align="center">
-  <img src="https://img.shields.io/badge/Claude%20Desktop-1.11187.2-8A2BE2?style=for-the-badge&logo=anthropic" alt="Claude 版本">
+  <img src="https://img.shields.io/badge/Claude%20Desktop-1.11187.4-8A2BE2?style=for-the-badge&logo=anthropic" alt="Claude 版本">
   <img src="https://img.shields.io/badge/macOS-12.0%2B-00BFFF?style=for-the-badge&logo=apple" alt="macOS">
-  <img src="https://img.shields.io/badge/翻译-15,724%20条%20%7C%20100%25-success?style=for-the-badge" alt="翻译覆盖">
+  <img src="https://img.shields.io/badge/翻译-15,724%20%2B%20407%20条%20%7C%20100%25-success?style=for-the-badge" alt="翻译覆盖">
   <img src="https://img.shields.io/badge/license-MIT-blue?style=for-the-badge" alt="License">
 </p>
 
@@ -36,7 +36,8 @@ sudo bash install.sh restore
 | 🔧 语言白名单 | 找到 `["en-US","de-DE",…,"id-ID"]` 数组，追加 `"zh-CN"` |
 | 🌐 日期 locale 映射 | 找到 `const w8={"en-US":"en",…}` 对象，追加 `"zh-CN":"zh"` |
 | 🎭 Persona 语言开关 | 找到 `case"id-ID":…;default:` 语句，插入中文分支 |
-| 📦 翻译合并 | 将 `zh-CN.json` 与 `en-US.json` 合并，写入 `i18n/zh-CN.json` |
+| 📦 翻译合并（app 层） | 将 `zh-CN-app.json` 与 `en-US.json` 合并，写入 `i18n/zh-CN.json` |
+| 📦 翻译注入（shell 层） | 将 `zh-CN-shell.json` 写入 `Resources/zh-CN.json` |
 | 📊 statsig 同步 | 复制 `statsig-zh-CN.json` 到 `i18n/statsig/zh-CN.json` |
 
 > **为什么不需要重新签名？** 资源文件变更不受 macOS 代码签名检查。
@@ -45,8 +46,9 @@ sudo bash install.sh restore
 
 ```
 claude-tweaks/
-├── zh-CN.json              Claude 1.11187.2 简体中文翻译（15,724 条，100% 覆盖）
-├── statsig-zh-CN.json      statsig 简体中文翻译（65 条，新版 Claude 必需）
+├── zh-CN-app.json          Claude 1.11187.4 简体中文翻译（15,724 条，100% 覆盖，应用内 UI 层）
+├── zh-CN-shell.json        Claude 1.11187.4 简体中文翻译（407 条，100% 覆盖，原生 Shell 层）
+├── zh-CN-statsig.json      statsig 简体中文翻译（65 条，新版 Claude 必需）
 ├── install.sh                     安装/还原脚本
 └── README.md                      本文件
 ```

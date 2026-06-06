@@ -125,6 +125,16 @@ if content != original:
 PYEOF
 }
 
+install_resources_locale() {
+    # New in v1.11187.4: compact i18n system in Resources/
+    local src="$RES/zh-CN-shell.json"
+    local dst="$APP/Contents/Resources/zh-CN.json"
+    if [ -f "$src" ]; then
+        cp "$src" "$dst"
+        log "Resources locale installed"
+    fi
+}
+
 install_locale() {
     local target="$APP/Contents/Resources/ion-dist/i18n/zh-CN.json"
     python3 - "$APP" "$RES" "$target" << 'PYEOF'
@@ -134,7 +144,7 @@ app, res, target = sys.argv[1], sys.argv[2], sys.argv[3]
 
 try:
     en = json.load(open(f'{app}/Contents/Resources/ion-dist/i18n/en-US.json'))
-    zh = json.load(open(f'{res}/zh-CN.json'))
+    zh = json.load(open(f'{res}/zh-CN-app.json'))
 except FileNotFoundError as e:
     print(f'Error: {e}', file=sys.stderr)
     sys.exit(1)
@@ -161,7 +171,7 @@ PYEOF
 
 install_statsig() {
     local target="$APP/Contents/Resources/ion-dist/i18n/statsig/zh-CN.json"
-    cp "$RES/statsig-zh-CN.json" "$target"
+    cp "$RES/zh-CN-statsig.json" "$target"
     log "Statsig locale installed"
 }
 
@@ -175,6 +185,7 @@ case "${1:-install}" in
             patch_persona_switch "$js"
         done
         install_locale
+        install_resources_locale
         install_statsig
         log "Done! Launching Claude..."
         open -a "$APP"
@@ -183,6 +194,7 @@ case "${1:-install}" in
         quit_claude
         rm -f "$APP/Contents/Resources/ion-dist/i18n/zh-CN.json"
         rm -f "$APP/Contents/Resources/ion-dist/i18n/statsig/zh-CN.json"
+        rm -f "$APP/Contents/Resources/zh-CN.json"
         log "Removed zh-CN locale files"
         log "Restoring JS files..."
         for js in $(find_v1_js); do
