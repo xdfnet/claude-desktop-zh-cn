@@ -169,10 +169,10 @@ PYEOF
     log "Locale installed"
 }
 
-install_statsig() {
-    local target="$APP/Contents/Resources/ion-dist/i18n/statsig/zh-CN.json"
+install_dynamic_locale() {
+    local target="$APP/Contents/Resources/ion-dist/i18n/dynamic/zh-CN.json"
     cp "$RES/zh-CN-statsig.json" "$target"
-    log "Statsig locale installed"
+    log "Dynamic locale installed"
 }
 
 case "${1:-install}" in
@@ -186,14 +186,14 @@ case "${1:-install}" in
         done
         install_locale
         install_resources_locale
-        install_statsig
+        install_dynamic_locale
         log "Done! Launching Claude..."
         open -a "$APP"
         ;;
     restore)
         quit_claude
         rm -f "$APP/Contents/Resources/ion-dist/i18n/zh-CN.json"
-        rm -f "$APP/Contents/Resources/ion-dist/i18n/statsig/zh-CN.json"
+        rm -f "$APP/Contents/Resources/ion-dist/i18n/dynamic/zh-CN.json"
         rm -f "$APP/Contents/Resources/zh-CN.json"
         log "Removed zh-CN locale files"
         log "Restoring JS files..."
