@@ -29,26 +29,4 @@ sudo bash install.sh restore
 
 脚本会自动退出 Claude、注入翻译、再启动。
 
-## 原理
-
-| 步骤 | 说明 |
-|------|------|
-| 🔧 语言白名单 | 找到 `["en-US","de-DE",…,"id-ID"]` 数组，追加 `"zh-CN"` |
-| 🌐 日期 locale 映射 | 找到 `const w8={"en-US":"en",…}` 对象，追加 `"zh-CN":"zh"` |
-| 🎭 Persona 语言开关 | 找到 `case"id-ID":…;default:` 语句，插入中文分支 |
-| 📦 翻译合并（app 层） | 将 `zh-CN-app.json` 与 `en-US.json` 合并，写入 `i18n/zh-CN.json` |
-| 📦 翻译注入（shell 层） | 将 `zh-CN-shell.json` 写入 `Resources/zh-CN.json` |
-| 📊 Dynamic 同步 | 复制 `zh-CN-statsig.json` 到 `i18n/dynamic/zh-CN.json` |
-
-> **为什么不需要重新签名？** 资源文件变更不受 macOS 代码签名检查。
-
-## 文件
-
-```
-claude-tweaks/
-├── zh-CN-app.json          Claude 1.12603.1 简体中文翻译（16,178 条，100% 覆盖，应用内 UI 层）
-├── zh-CN-shell.json        Claude 1.12603.1 简体中文翻译（425 条，100% 覆盖，原生 Shell 层）
-├── zh-CN-statsig.json      Dynamic i18n 简体中文翻译（69 条，模型选择标签 / A/B 测试）
-├── install.sh                     安装/还原脚本
-└── README.md                      本文件
-```
+> 架构细节、注入原理、文件结构详见 [ARCHITECTURE.md](ARCHITECTURE.md)
