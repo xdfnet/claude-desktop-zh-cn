@@ -1,7 +1,7 @@
 <p align="center">
-  <img src="https://img.shields.io/badge/Claude%20Desktop-1.11847.5-8A2BE2?style=for-the-badge&logo=anthropic" alt="Claude 版本">
+  <img src="https://img.shields.io/badge/Claude%20Desktop-1.12603.1-8A2BE2?style=for-the-badge&logo=anthropic" alt="Claude 版本">
   <img src="https://img.shields.io/badge/macOS-12.0%2B-00BFFF?style=for-the-badge&logo=apple" alt="macOS">
-  <img src="https://img.shields.io/badge/翻译-15,966%20%2B%20422%20条%20%7C%20100%25-success?style=for-the-badge" alt="翻译覆盖">
+  <img src="https://img.shields.io/badge/翻译-16,178%20%2B%20425%20条%20%7C%20100%25-success?style=for-the-badge" alt="翻译覆盖">
   <img src="https://img.shields.io/badge/license-MIT-blue?style=for-the-badge" alt="License">
 </p>
 
@@ -46,9 +46,9 @@ sudo bash install.sh restore
 
 ```
 claude-tweaks/
-├── zh-CN-app.json          Claude 1.11847.5 简体中文翻译（15,966 条，100% 覆盖，应用内 UI 层）
-├── zh-CN-shell.json        Claude 1.11847.5 简体中文翻译（422 条，100% 覆盖，原生 Shell 层）
-├── zh-CN-statsig.json      Dynamic i18n 简体中文翻译（65 条，模型选择标签 / A/B 测试）
+├── zh-CN-app.json          Claude 1.12603.1 简体中文翻译（16,178 条，100% 覆盖，应用内 UI 层）
+├── zh-CN-shell.json        Claude 1.12603.1 简体中文翻译（425 条，100% 覆盖，原生 Shell 层）
+├── zh-CN-statsig.json      Dynamic i18n 简体中文翻译（69 条，模型选择标签 / A/B 测试）
 ├── install.sh                     安装/还原脚本
 └── README.md                      本文件
 ```
