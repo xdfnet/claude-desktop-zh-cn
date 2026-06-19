@@ -4,9 +4,9 @@
 
 | 层 | 文件 | 目标路径 | 条目 | 类型 |
 |---|---|---|---|---|
-| **Shell** | `zh-CN-shell.json` | `Resources/zh-CN.json` | 425 | Electron 原生界面（菜单、对话框、系统弹窗） |
-| **App** | `zh-CN-app.json` | `ion-dist/i18n/zh-CN.json` | 16,178 | 应用内 Web UI（设置、对话、侧栏） |
-| **Dynamic** | `zh-CN-statsig.json` | `ion-dist/i18n/dynamic/zh-CN.json` | 69 | 模型选择标签、A/B 测试 i18n |
+| **Shell** | `zh-CN-shell.json` | `Resources/zh-CN.json` | 424 | Electron 原生界面（菜单、对话框、系统弹窗） |
+| **App** | `zh-CN-app.json` | `ion-dist/i18n/zh-CN.json` | 16,625 | 应用内 Web UI（设置、对话、侧栏） |
+| **Dynamic** | `zh-CN-statsig.json` | `ion-dist/i18n/dynamic/zh-CN.json` | 46 | 模型选择标签、A/B 测试 i18n |
 
 - **Shell / Dynamic**：直接拷贝目标路径即完成注入
 - **App**：需与 `en-US.json` merge，保留 en-US 中未翻译的 key 作为 fallback
@@ -26,7 +26,7 @@
 
 `install.sh` 在 `ion-dist/assets/v1/*.js` 中用正则搜索替换三处：
 
-1. **w8 map** — locale→languageCode 映射对象，追加 `"zh-CN":"zh"`
+1. **locale map** — locale→languageCode 映射对象，追加 `"zh-CN":"zh"`
 2. **lang array** — 语言白名单数组，追加 `"zh-CN"`
 3. **persona switch** — Persona locale switch，插入中文分支
 

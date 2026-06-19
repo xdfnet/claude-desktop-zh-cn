@@ -3,7 +3,6 @@
   "+7sd9hoyZA": "复制",
   "+Fax0wMvjs": "将创客设备连接到 Claude",
   "+NwlCZ9GfR": "您尚未登录。请登录以访问扩展目录。",
-  "+W0xFi2jhJ": "创建",
   "+qat3UyOdy": "Claude for macOS 和 Windows 可通过 BLE 将 Claude Cowork 和 Claude Code 连接到创客设备，让开发者构建可显示权限提示、最近消息和其他交互的硬件。",
   "+rUDCO79Js": "扫描中 5 秒…",
   "+vRFr4+yQ/": "允许 Claude 控制 {apps}？",
@@ -182,7 +181,6 @@
   "RLUi8uLyg5": "取消",
   "RLsDPY9y1h": "5 小时限制",
   "RTg057HE1D": "显示开发者工具",
-  "RdOxaQTgbS": "您的管理员配置了{count, plural, one {一个尚不存在的} other {多个尚不存在的}}工作区文件夹：{paths}",
   "RfG2KsHAez": "计算机使用",
   "RfhFFMTHtV": "该仓库包含构建和连接自己设备的完整详情。以下是简要版本。",
   "Rml4N1fH2B": "离开设计？",
@@ -288,7 +286,6 @@
   "grarAzxOkG": "全选",
   "h2/d8qB672": "确定",
   "hKoMFC5IFq": "选择扩展文件夹",
-  "hOB0LegXn/": "创建{count, plural, one {# 个} other {# 个}}工作区文件夹？",
   "hP8u9k9wUe": "允许的位置：{roots}",
   "hRbRJYTRCJ": "无限",
   "hZ9MEsSHoK": "安装扩展…",
@@ -396,7 +393,6 @@
   "tjZvRtHnCc": "查找上一个",
   "tkAZD2CTH1": "通过 Nordic UART 服务广播以 <code>Claude</code> 开头的名称。传输内容为 UTF-8 JSON——每行一个对象，以 <code>\\n</code> 结尾。",
   "to40hXUNmk": "获取支持",
-  "u3FpQof9Mu": "跳过",
   "uCuWiNkafs": "安装",
   "uKCcuVd1Yt": "重新加载 MCP 配置",
   "uc3dnSo+eo": "文件",
@@ -423,5 +419,8 @@
   "zAYm/Z684h": "帮助",
   "zTrDHxC7yZ": "BLE API 仅在桌面应用处于开发者模式时可用。它面向创客和开发者，不是官方支持的产品功能。",
   "zasatRyQg/": "在 Finder 中显示 Cowork 会话数据",
-  "ze7mxSJ8h8": "打开"
+  "ze7mxSJ8h8": "打开",
+  "nESSEk/JdL": "在此设备上无法保存登录状态。请安装并解锁系统密钥环。",
+  "q3gBQQm1Rp": "打开快速输入",
+  "vNugLliRtu": "您的网络将此请求重定向到了 {host}。请联系您的 IT 管理员。"
 }
