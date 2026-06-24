@@ -1,12 +1,13 @@
 <p align="center">
-  <img src="https://img.shields.io/badge/Claude%20Desktop-1.14271.0-8A2BE2?style=for-the-badge&logo=anthropic" alt="Claude 版本">
+  <img src="https://img.shields.io/badge/Claude%20Desktop-1.15200.0-8A2BE2?style=for-the-badge&logo=anthropic" alt="Claude 版本">
   <img src="https://img.shields.io/badge/macOS-12.0%2B-00BFFF?style=for-the-badge&logo=apple" alt="macOS">
-  <img src="https://img.shields.io/badge/翻译-15,057%20%2B%20424%20%2B%2046%20条%20%7C%2091%25-yellow?style=for-the-badge" alt="翻译覆盖">
+  <img src="https://img.shields.io/badge/翻译-15,462%20%2B%20428%20%2B%2046%20条%20%7C%2091%25-yellow?style=for-the-badge" alt="翻译覆盖">
   <img src="https://img.shields.io/badge/license-MIT-blue?style=for-the-badge" alt="License">
 </p>
 
 <p align="center">
-  <b>🀄 Claude Desktop 简体中文汉化</b><br>
+  <b>🀄 claude-desktop-zh-cn</b><br>
+  <b>Claude Desktop 简体中文汉化</b><br>
   <i>只改资源文件，不动代码签名。安全、纯净、可还原。</i>
 </p>
 
@@ -27,6 +28,6 @@ sudo bash install.sh
 sudo bash install.sh restore
 ```
 
-脚本会自动退出 Claude、注入翻译、再启动。
+脚本会自动退出 Claude、打补丁、再启动。
 
-> 架构细节、注入原理、文件结构详见 [ARCHITECTURE.md](ARCHITECTURE.md)
+> 架构细节、补丁原理、文件结构详见 [ARCHITECTURE.md](ARCHITECTURE.md)

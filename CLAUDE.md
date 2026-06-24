@@ -4,12 +4,12 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## 项目概述
 
-Claude Desktop 简体中文汉化工具（v1.14271.0）。只改资源文件，不动代码签名，安全可还原。
+Claude Desktop 简体中文汉化工具（v1.15200.0）。只改资源文件，不动代码签名，安全可还原。
 
 ## 常用命令
 
 ```bash
-# 安装汉化（会自动退出 Claude、注入翻译、再启动）
+# 安装汉化（会自动退出 Claude、打补丁、再启动）
 sudo bash install.sh
 
 # 还原
@@ -20,14 +20,14 @@ sudo bash install.sh restore
 
 | 层 | 文件 | 目标路径 | 条目 | 类型 |
 |---|---|---|---|---|
-| **Shell** | `zh-CN-shell.json` | `Resources/zh-CN.json` | 424 | Electron 原生界面（菜单、对话框、系统弹窗） |
-| **App** | `zh-CN-app.json` | `ion-dist/i18n/zh-CN.json` | 16,625 | 应用内 Web UI（设置、对话、侧栏） |
+| **Shell** | `zh-CN-shell.json` | `Resources/zh-CN.json` | 428 | Electron 原生界面（菜单、对话框、系统弹窗） |
+| **App** | `zh-CN-app.json` | `ion-dist/i18n/zh-CN.json` | 16,980 | 应用内 Web UI（设置、对话、侧栏） |
 | **Dynamic** | `zh-CN-statsig.json` | `ion-dist/i18n/dynamic/zh-CN.json` | 46 | 模型选择标签、A/B 测试 i18n（原 Statsig） |
 
-- **Shell/Statsig**：直接拷贝目标路径即完成注入
+- **Shell/Statsig**：直接拷贝目标路径即完成补丁
 - **App**：需与 `en-US.json` merge，保留 en-US 中未翻译的 key 作为 fallback
 
-## 补丁注入（JS 修改）
+## JS 补丁
 
 `install.sh` 在 `ion-dist/assets/v1/*.js` 中用正则搜索替换三处：
 
@@ -40,7 +40,7 @@ sudo bash install.sh restore
 ## 关键约束
 
 - **不动代码签名** — 只改 `Resources/` 和 `ion-dist/` 下的文件，macOS 签名不受影响
-- **可还原** — `restore` 删除注入文件 + 回滚 JS 补丁
+- **可还原** — `restore` 删除补丁文件 + 回滚 JS 修改
 - **增量兼容** — iOS、Web、旧版 Desktop 不受影响
 - **Shell 层使用紧凑哈希 key**（v1.11187.4 引入），App 层沿用旧式哈希 key
 
