@@ -4,7 +4,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## 项目概述
 
-Claude Desktop 简体中文汉化工具（v1.15200.0）。只改资源文件，不动代码签名，安全可还原。
+Claude Desktop 简体中文汉化工具（v1.15962.0）。只改资源文件，不动代码签名，安全可还原。
 
 ## 常用命令
 
@@ -20,8 +20,8 @@ sudo bash install.sh restore
 
 | 层 | 文件 | 目标路径 | 条目 | 类型 |
 |---|---|---|---|---|
-| **Shell** | `zh-CN-shell.json` | `Resources/zh-CN.json` | 428 | Electron 原生界面（菜单、对话框、系统弹窗） |
-| **App** | `zh-CN-app.json` | `ion-dist/i18n/zh-CN.json` | 16,980 | 应用内 Web UI（设置、对话、侧栏） |
+| **Shell** | `zh-CN-shell.json` | `Resources/zh-CN.json` | 430 | Electron 原生界面（菜单、对话框、系统弹窗） |
+| **App** | `zh-CN-app.json` | `ion-dist/i18n/zh-CN.json` | 17,316 | 应用内 Web UI（设置、对话、侧栏） |
 | **Dynamic** | `zh-CN-statsig.json` | `ion-dist/i18n/dynamic/zh-CN.json` | 46 | 模型选择标签、A/B 测试 i18n（原 Statsig） |
 
 - **Shell/Statsig**：直接拷贝目标路径即完成补丁

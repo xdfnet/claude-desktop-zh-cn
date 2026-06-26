@@ -12,11 +12,10 @@ quit_claude() {
 }
 
 find_v1_js() {
-    # Returns all JS files in v1 dir
     ls "$APP/Contents/Resources/ion-dist/assets/v1/"*.js 2>/dev/null
 }
 
-patch_w8_map() {
+patch_locale_map() {
     local js="$1"
     python3 - "$js" << 'PYEOF'
 import re, sys
@@ -25,7 +24,8 @@ js = sys.argv[1]
 with open(js) as f:
     content = f.read()
 
-# const w8={"en-US":"en","de-DE":"de",...}
+# In v1.15962.0, locale map: const uze={"en-US":"en","de-DE":"de",...}
+# Note: hi-IN→"en", pt-BR→"pt_BR" in this version
 m = re.search(r'const\s+\w+\s*=\s*\{"en-US":"en"[^}]+\}', content)
 if not m:
     sys.exit(0)
@@ -34,11 +34,12 @@ orig = m.group(0)
 if '"zh-CN"' in orig:
     sys.exit(0)
 
+# Insert zh-CN before the closing brace
 patched = orig[:-1] + ',"zh-CN":"zh"}'
 content = content.replace(orig, patched, 1)
 with open(js, 'w') as f:
     f.write(content)
-print('  w8 map: zh-CN added')
+print('  locale map: zh-CN added')
 PYEOF
 }
 
@@ -51,6 +52,7 @@ js = sys.argv[1]
 with open(js) as f:
     content = f.read()
 
+# In v1.15962.0: DW=["en-US","de-DE","fr-FR","ko-KR","ja-JP","es-419","es-ES","it-IT","hi-IN","pt-BR","id-ID"]
 m = re.search(r'\["en-US","de-DE","fr-FR","ko-KR","ja-JP","es-419","es-ES","it-IT","hi-IN","pt-BR","id-ID"\]', content)
 if not m:
     sys.exit(0)
@@ -79,12 +81,14 @@ with open(js) as f:
 if 'case"zh-CN"' in content:
     sys.exit(0)
 
-# Pattern: case"id-ID":return["language","id"];default:return r
-m = re.search(r'case"id-ID":return\["language","id"\];default:', content)
+# Pattern: case"id-ID":return["language","id"];default:return t
+m = re.search(r'case"id-ID":return\["language","id"\];default:return\s+t', content)
 if not m:
     sys.exit(0)
 
 orig = m.group(0)
+# Also handle default:return t vs default:return r (variable name may differ)
+# The pattern is: ...;default:return <var>
 patched = orig.replace(';default:', ';case"zh-CN":return["language","zh"];default:')
 content = content.replace(orig, patched, 1)
 with open(js, 'w') as f:
@@ -126,7 +130,6 @@ PYEOF
 }
 
 install_resources_locale() {
-    # New in v1.11187.4: compact i18n system in Resources/
     local src="$RES/zh-CN-shell.json"
     local dst="$APP/Contents/Resources/zh-CN.json"
     if [ -f "$src" ]; then
@@ -166,7 +169,7 @@ with open(target, 'w') as out:
 
 print(f'zh-CN: {translated} translated, {fallback} fallback')
 PYEOF
-    log "Locale installed"
+    log "App locale installed"
 }
 
 install_dynamic_locale() {
@@ -180,7 +183,9 @@ case "${1:-install}" in
         quit_claude
         log "Patching JS files..."
         for js in $(find_v1_js); do
-            patch_w8_map "$js"
+            # Locale map and lang array are in the same JS file (content-hash named)
+            # Persona switch is in a separate file — check all for safe idempotency
+            patch_locale_map "$js"
             patch_lang_array "$js"
             patch_persona_switch "$js"
         done
