@@ -11,9 +11,18 @@ quit_claude() {
     sleep 1
 }
 
-# 安装 App 层翻译：合并中文 → ja-JP.json（替换日语）
+get_js_bundle() {
+    python3 -c "
+import re
+with open('$APP/Contents/Resources/ion-dist/index.html') as f:
+    m = re.search(r'src=\"(/assets/v1/index-[^\"]+\.js)\"', f.read())
+    print(m.group(1) if m else '')
+"
+}
+
+# 安装 App 层翻译：合并中文 → en-US.json
 install_app_locale() {
-    local target="$APP/Contents/Resources/ion-dist/i18n/ja-JP.json"
+    local target="$APP/Contents/Resources/ion-dist/i18n/en-US.json"
     python3 - "$APP" "$RES" "$target" << 'PYEOF'
 import json, sys
 
@@ -41,52 +50,21 @@ with open(target, 'w') as out:
     json.dump(merged, out, ensure_ascii=False, indent=2)
     out.write('\n')
 
-print(f'ja-JP: {translated} translated, {fallback} fallback')
+print(f'en-US: {translated} translated, {fallback} fallback')
 PYEOF
-    log "App locale installed (ja-JP -> Chinese)"
+    log "App locale installed (en-US -> Chinese)"
 }
 
 # 安装 Dynamic 层
 install_dynamic_locale() {
-    cp "$RES/zh-CN-statsig.json" "$APP/Contents/Resources/ion-dist/i18n/dynamic/ja-JP.json"
+    cp "$RES/zh-CN-statsig.json" "$APP/Contents/Resources/ion-dist/i18n/dynamic/en-US.json"
     log "Dynamic locale installed"
-}
-
-# 安装 Overrides
-install_overrides() {
-    cp "$RES/zh-CN-overrides.json" "$APP/Contents/Resources/ion-dist/i18n/ja-JP.overrides.json"
-    log "Overrides installed"
 }
 
 # 安装 Shell 层
 install_shell_locale() {
-    cp "$RES/zh-CN-shell.json" "$APP/Contents/Resources/ja-JP.json"
-    cp "$RES/zh-CN-shell.json" "$APP/Contents/Resources/zh-CN.json"
+    cp "$RES/zh-CN-shell.json" "$APP/Contents/Resources/en-US.json"
     log "Shell locale installed"
-}
-
-# 创建语言符号链：所有 zh-* 路径 → ja-JP
-create_symlinks() {
-    cd "$APP/Contents/Resources/ion-dist/i18n"
-    for link in zh-CN zh-Hans-CN zh-Hans zh; do
-        ln -sf ja-JP.json "$link.json" 2>/dev/null
-        ln -sf ja-JP.overrides.json "$link.overrides.json" 2>/dev/null
-    done
-    cd "$APP/Contents/Resources/ion-dist/i18n/dynamic"
-    for link in zh-CN zh-Hans-CN zh-Hans zh; do
-        ln -sf ja-JP.json "$link.json" 2>/dev/null
-    done
-    log "Language symlinks created"
-}
-
-# 获取主 JS bundle 路径
-get_js_bundle() {
-    python3 -c "
-import re
-with open('$APP/Contents/Resources/ion-dist/index.html') as f:
-    m = re.search(r'src=\"(/assets/v1/index-[^\"]+\.js)\"', f.read())
-    print(m.group(1) if m else '')
-"
 }
 
 # 补丁：阻止服务端 bootstrap locale 覆盖
@@ -104,7 +82,7 @@ patch_ont() {
 with open('$full_path') as f:
     c = f.read()
 if 'function ont(){return null}' in c:
-    exit(0)  # already patched
+    exit(0)
 exit(1)
 " && { log "ont() already patched"; return; }
 
@@ -127,32 +105,18 @@ PYEOF
     log "ont() patch installed"
 }
 
-restore_ja_jp() {
-    # 从备份还原原始 ja-JP
-    if [ -f /tmp/ja-JP.json.bak ]; then
-        cp /tmp/ja-JP.json.bak "$APP/Contents/Resources/ion-dist/i18n/ja-JP.json"
-        log "ja-JP.json restored from backup"
-    else
-        log "Warning: no ja-JP backup found at /tmp/ja-JP.json.bak"
+restore_en_us() {
+    # 从备份还原原始 en-US
+    if [ -f /tmp/en-US.json.bak ]; then
+        cp /tmp/en-US.json.bak "$APP/Contents/Resources/ion-dist/i18n/en-US.json"
+        log "en-US.json restored from backup"
     fi
-    if [ -f /tmp/ja-JP-dynamic.json.bak ]; then
-        cp /tmp/ja-JP-dynamic.json.bak "$APP/Contents/Resources/ion-dist/i18n/dynamic/ja-JP.json"
+    if [ -f /tmp/en-US-dynamic.json.bak ]; then
+        cp /tmp/en-US-dynamic.json.bak "$APP/Contents/Resources/ion-dist/i18n/dynamic/en-US.json"
     fi
-    if [ -f /tmp/ja-JP-overrides.json.bak ]; then
-        cp /tmp/ja-JP-overrides.json.bak "$APP/Contents/Resources/ion-dist/i18n/ja-JP.overrides.json"
+    if [ -f /tmp/en-US-shell.json.bak ]; then
+        cp /tmp/en-US-shell.json.bak "$APP/Contents/Resources/en-US.json"
     fi
-}
-
-restore_symlinks() {
-    cd "$APP/Contents/Resources/ion-dist/i18n"
-    for link in zh-CN zh-Hans-CN zh-Hans zh; do
-        rm -f "$link.json" "$link.overrides.json" 2>/dev/null
-    done
-    cd "$APP/Contents/Resources/ion-dist/i18n/dynamic"
-    for link in zh-CN zh-Hans-CN zh-Hans zh; do
-        rm -f "$link.json" 2>/dev/null
-    done
-    log "Symlinks removed"
 }
 
 restore_patch() {
@@ -185,26 +149,23 @@ PYEOF
 case "${1:-install}" in
     install)
         quit_claude
-        # 备份原始 ja-JP 文件（仅首次安装时备份）
-        [ ! -f /tmp/ja-JP.json.bak ] && cp "$APP/Contents/Resources/ion-dist/i18n/ja-JP.json" /tmp/ja-JP.json.bak 2>/dev/null || true
-        [ ! -f /tmp/ja-JP-dynamic.json.bak ] && cp "$APP/Contents/Resources/ion-dist/i18n/dynamic/ja-JP.json" /tmp/ja-JP-dynamic.json.bak 2>/dev/null || true
-        [ ! -f /tmp/ja-JP-overrides.json.bak ] && cp "$APP/Contents/Resources/ion-dist/i18n/ja-JP.overrides.json" /tmp/ja-JP-overrides.json.bak 2>/dev/null || true
+
+        # 备份原始 en-US 文件（仅首次安装时备份）
+        [ ! -f /tmp/en-US.json.bak ] && cp "$APP/Contents/Resources/ion-dist/i18n/en-US.json" /tmp/en-US.json.bak 2>/dev/null || true
+        [ ! -f /tmp/en-US-dynamic.json.bak ] && cp "$APP/Contents/Resources/ion-dist/i18n/dynamic/en-US.json" /tmp/en-US-dynamic.json.bak 2>/dev/null || true
+        [ ! -f /tmp/en-US-shell.json.bak ] && cp "$APP/Contents/Resources/en-US.json" /tmp/en-US-shell.json.bak 2>/dev/null || true
         log "Backup saved"
 
         install_app_locale
         install_dynamic_locale
-        install_overrides
         install_shell_locale
-        create_symlinks
         patch_ont
         log "Done! Launching Claude..."
         open -a "$APP"
         ;;
     restore)
         quit_claude
-        restore_ja_jp
-        restore_symlinks
-        rm -f "$APP/Contents/Resources/ja-JP.json" "$APP/Contents/Resources/zh-CN.json" 2>/dev/null
+        restore_en_us
         restore_patch
         log "Restored. Launching Claude..."
         open -a "$APP"

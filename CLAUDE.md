@@ -18,23 +18,21 @@ sudo bash install.sh restore
 
 ## 汉化原理
 
-Claude Desktop 官方支持日语（ja-JP）但不支持中文。汉化方案是 **替换日语文件为中文**：
+直接用简体中文 **替换英文（en-US）文件**。英文是系统默认回退语言，替换后无论系统语言怎么设都显示中文。
 
 | 层 | 源文件 | 目标路径 | 条目 | 说明 |
 |---|---|---|---|---|
-| **App** | `zh-CN-app.json` | `i18n/ja-JP.json` | 18,043 | 应用 UI（替换日语） |
-| **Dynamic** | `zh-CN-statsig.json` | `i18n/dynamic/ja-JP.json` | 46 | 模型标签等 |
-| **Overrides** | `zh-CN-overrides.json` | `i18n/ja-JP.overrides.json` | 344 | 法律条款等 |
-| **Shell** | `zh-CN-shell.json` | `Resources/ja-JP.json` | 435 | 原生界面（菜单、对话框） |
-| **Symlinks** | → | `i18n/zh-*.json → ja-JP.json` | — | 系统中文 locale 指向日语文件 |
+| **App** | `zh-CN-app.json` | `i18n/en-US.json` | 16,295 | 应用 UI（替换英文） |
+| **Dynamic** | `zh-CN-statsig.json` | `i18n/dynamic/en-US.json` | 46 | 模型标签等 |
+| **Shell** | `zh-CN-shell.json` | `Resources/en-US.json` | 435 | 原生界面（菜单、对话框） |
 
-同时通过 **JS 补丁** 将 `ont()` 组件改为空函数，阻止服务端 bootstrap 返回的 `locale` 覆盖系统语言。
+同时通过 **JS 补丁** 将 `ont()` 组件改为空函数，阻止服务端 bootstrap 返回的 `locale` 覆盖语言。
 
 ## 关键约束
 
 - **不动代码签名** — 只改 `Resources/` 和 `ion-dist/` 下的文件，macOS 签名不受影响
-- **可还原** — `restore` 还原原始日语文件 + 回滚 JS 补丁
-- **增量兼容** — iOS、Web 不受影响；日语用户需先 restore 再使用
+- **可还原** — 备份原始英文文件到 `/tmp/`，restore 完全回滚
+- **增量兼容** — iOS、Web、旧版 Desktop 不受影响
 
 ## 词典维护规范
 
